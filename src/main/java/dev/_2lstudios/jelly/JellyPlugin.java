@@ -25,7 +25,7 @@ public class JellyPlugin extends JavaPlugin {
     private IPluginPlayerManager pluginPlayerManager;
 
     public void useInventoryAPI() {
-        this.addEventListener(new InventoryClickListener());
+        this.addEventListener(new InventoryClickListener(this));
         this.addEventListener(new InventoryCloseListener());
     }
 

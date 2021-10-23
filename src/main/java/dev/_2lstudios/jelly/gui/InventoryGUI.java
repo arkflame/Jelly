@@ -6,10 +6,11 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import dev._2lstudios.jelly.player.PluginPlayer;
 
 public abstract class InventoryGUI {
 
@@ -21,7 +22,6 @@ public abstract class InventoryGUI {
         this.items = new HashMap<>();
         this.inventory = Bukkit.createInventory(null, size, name);
         this.prevGui = prevGui;
-        this.init();
     }
 
     public InventoryGUI(final String name, final int size) {
@@ -34,7 +34,7 @@ public abstract class InventoryGUI {
 
     public abstract void init();
 
-    public abstract void handle(final int id, final Player player);
+    public abstract void handle(final int id, final PluginPlayer player);
 
     public int calcPos(int x, int y) {
         return (x - 1) + (9 * (y - 1));
@@ -44,9 +44,10 @@ public abstract class InventoryGUI {
         return items.get(slot);
     }
 
-    public void open(final Player player) {
-        player.openInventory(this.inventory);
-        InventoryManager.openInventory(player, this);
+    public void open(final PluginPlayer player) {
+        this.init();
+        player.getBukkitPlayer().openInventory(this.inventory);
+        InventoryManager.openInventory(player.getBukkitPlayer(), this);
     }
 
     public void addItem(final int id, final ItemStack item, final int slot) {
@@ -83,12 +84,12 @@ public abstract class InventoryGUI {
         return this.inventory;
     }
 
-    public void close(final Player player) {
-        player.closeInventory();
-        InventoryManager.closeInventory(player);
+    public void close(final PluginPlayer player) {
+        player.getBukkitPlayer().closeInventory();
+        InventoryManager.closeInventory(player.getBukkitPlayer());
     }
 
-    public void back(final Player player) {
+    public void back(final PluginPlayer player) {
         if (this.prevGui != null) {
             this.prevGui.open(player);
         } else {

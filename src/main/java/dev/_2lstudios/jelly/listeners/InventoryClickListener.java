@@ -7,11 +7,19 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.Inventory;
 
+import dev._2lstudios.jelly.JellyPlugin;
 import dev._2lstudios.jelly.gui.InventoryGUI;
 import dev._2lstudios.jelly.gui.InventoryManager;
+import dev._2lstudios.jelly.player.PluginPlayer;
 import dev._2lstudios.jelly.utils.ServerUtils;
 
 public class InventoryClickListener implements Listener {
+
+    private final JellyPlugin plugin;
+
+    public InventoryClickListener(final JellyPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
@@ -26,10 +34,13 @@ public class InventoryClickListener implements Listener {
                 clickedInventory = e.getClickedInventory();
             }
 
+            final PluginPlayer pluginPlayer = this.plugin.getPluginPlayerManager().getPlayer(player);
             final int slot = e.getSlot();
-            if (gui != null && clickedInventory.equals(gui.getInventory()) && e.getInventory().getItem(slot) != null) {
+
+            if (pluginPlayer != null && gui != null && clickedInventory.equals(gui.getInventory())
+                    && e.getInventory().getItem(slot) != null) {
                 e.setCancelled(true);
-                gui.handle(gui.getItemID(slot), player);
+                gui.handle(gui.getItemID(slot), pluginPlayer);
             }
         }
     }
