@@ -1,15 +1,22 @@
 package dev._2lstudios.jelly.player;
 
+import java.lang.reflect.Field;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import dev._2lstudios.jelly.JellyPlugin;
+import dev._2lstudios.jelly.utils.ReflectionUtils;
 import dev._2lstudios.jelly.utils.ServerUtils;
 
 public class PluginPlayer {
+    private final JellyPlugin plugin;
     private final Player player;
 
-    public PluginPlayer(final Player player) {
+    public PluginPlayer(final JellyPlugin plugin, final Player player) {
+        this.plugin = plugin;
         this.player = player;
     }
 
@@ -17,8 +24,28 @@ public class PluginPlayer {
         return this.player;
     }
 
+    public String getLocale() {
+        try {
+            final Object ep = ReflectionUtils.getMethod("getHandle", player.getClass()).invoke(player, (Object[]) null);
+            final Field f = ep.getClass().getDeclaredField("locale");
+            f.setAccessible(true);
+            return (String) f.get(ep);
+        } catch (final Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String getI18nString(final String key) {
+        final String locale = this.getLocale();
+        final String value = this.plugin.getLanguageManager().getLanguage(locale).getString(key);
+        return value != null ? value : "&cMissing translation key " + key + " for locale " + locale + ".";
+    }
+
     public void playSound(final Sound sound) {
-        this.getBukkitPlayer().playSound(this.getBukkitPlayer().getLocation(), sound, 1, 1);
+        if (sound != null) {
+            this.getBukkitPlayer().playSound(this.getBukkitPlayer().getLocation(), sound, 1, 1);
+        }
     }
 
     public void teleport(final Location loc) {
@@ -40,4 +67,11 @@ public class PluginPlayer {
         }
     }
 
+    public void sendMessage(final String message) {
+        this.player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+    }
+
+    public void sendI18nMessage(final String key) {
+        this.sendI18nMessage(this.getI18nString(key));
+    }
 }

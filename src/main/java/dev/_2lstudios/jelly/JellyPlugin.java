@@ -1,5 +1,7 @@
 package dev._2lstudios.jelly;
 
+import java.io.File;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -8,6 +10,7 @@ import dev._2lstudios.jelly.commands.CommandHandler;
 import dev._2lstudios.jelly.commands.CommandListener;
 import dev._2lstudios.jelly.config.ConfigManager;
 import dev._2lstudios.jelly.config.Configuration;
+import dev._2lstudios.jelly.i18n.LanguageManager;
 import dev._2lstudios.jelly.listeners.InventoryClickListener;
 import dev._2lstudios.jelly.listeners.InventoryCloseListener;
 import dev._2lstudios.jelly.listeners.PlayerJoinListener;
@@ -18,6 +21,7 @@ public class JellyPlugin extends JavaPlugin {
 
     private CommandHandler commandHandler = new CommandHandler(this);
     private ConfigManager configManager = new ConfigManager(this);
+    private LanguageManager languageManager = new LanguageManager(new File(this.getDataFolder(), "lang"));
     private IPluginPlayerManager pluginPlayerManager;
 
     public void useInventoryAPI() {
@@ -39,6 +43,10 @@ public class JellyPlugin extends JavaPlugin {
 
     public IPluginPlayerManager getPluginPlayerManager() {
         return this.pluginPlayerManager;
+    }
+
+    public LanguageManager getLanguageManager() {
+        return this.languageManager;
     }
 
     public void setPluginPlayerManager(final IPluginPlayerManager manager) {

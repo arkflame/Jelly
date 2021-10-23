@@ -3,7 +3,9 @@ package dev._2lstudios.jelly.config;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -65,10 +67,23 @@ public class Configuration extends YamlConfiguration {
         return super.getBoolean(path, defaultValue);
     }
 
+    public List<String> getStringList(final String path, final List<String> defaultValue) {
+        this.setIfNotExist(path, defaultValue);
+        return super.getStringList(path);
+    }
+
     /* Custom object get and set */
     private Sound getSound(final String key) {
         final String name = this.getString(key);
-        return Sound.valueOf(name);
+
+        for (final Sound sound : Sound.values()) {
+            if (name.equals(sound.name())) {
+                return sound;
+            }
+        }
+
+        Bukkit.getLogger().warning("Couldn't load sound '" + name + "' from configuration file! (Invalid name?)");
+        return null;
     }
 
     public Sound getSound(final String key, final String defaultValue) {

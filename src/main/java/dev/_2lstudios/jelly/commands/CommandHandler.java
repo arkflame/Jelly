@@ -103,8 +103,8 @@ public class CommandHandler implements CommandExecutor {
         } catch (Exception e) {
             if (e instanceof I18nCommandException && sender instanceof Player) {
                 final PluginPlayer player = context.getPluginPlayer();
-                // final I18nCommandException i18nE = (I18nCommandException) e;
-                player.getBukkitPlayer(); // ToDO: Make send message
+                final I18nCommandException i18nE = (I18nCommandException) e;
+                player.sendI18nMessage(i18nE.getKey());
             } else if (e instanceof CommandException) {
                 sender.sendMessage("§c" + e.getMessage());
             } else {
