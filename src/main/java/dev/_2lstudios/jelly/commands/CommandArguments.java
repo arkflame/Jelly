@@ -12,7 +12,7 @@ public class CommandArguments {
 
     /* Generic getters */
     public Object get(final int index) {
-        if (args.length < index) {
+        if (args.length <= index) {
             return null;
         }
 
