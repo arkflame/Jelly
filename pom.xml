@@ -3,10 +3,10 @@
 
     <!-- Project information -->
     <groupId>dev._2lstudios</groupId>
-    <artifactId>Jelly</artifactId>
+    <artifactId>jelly</artifactId>
     <packaging>jar</packaging>
 
-    <name>Jelly</name>
+    <name>jelly</name>
     <description>Framework to make Bukkit plugins</description>
     <version>0.0.3</version>
     <url>https://twitter.com/sammwy</url>
