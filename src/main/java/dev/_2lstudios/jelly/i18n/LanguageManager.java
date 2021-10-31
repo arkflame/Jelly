@@ -33,6 +33,8 @@ public class LanguageManager {
     public Configuration getLanguage(final String name) {
         if (languages.containsKey(name)) {
             return languages.get(name);
+        } else if (languages.containsKey(name)) {
+            return languages.get(name);
         } else if (languages.containsKey(name.split("[-]")[0])) {
             return languages.get(name.split("[-]")[0]);
         } else {

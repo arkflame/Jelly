@@ -32,12 +32,12 @@ public class PluginPlayer {
             return (String) f.get(ep);
         } catch (final Exception e) {
             e.printStackTrace();
-            return null;
+            return "en";
         }
     }
 
     public String getI18nString(final String key) {
-        final String locale = this.getLocale();
+        final String locale = this.getLocale().toLowerCase();
         final String value = this.plugin.getLanguageManager().getLanguage(locale).getString(key);
         return value != null ? value : "&cMissing translation key " + key + " for locale " + locale + ".";
     }
