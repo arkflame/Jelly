@@ -46,7 +46,7 @@ public class LanguageManager {
         }
 
         for (final File file : directory.listFiles()) {
-            if (file.getName().endsWith(".json")) {
+            if (file.getName().endsWith(".yml")) {
                 try {
                     this.loadLanguage(file);
                 } catch (FileNotFoundException e) {

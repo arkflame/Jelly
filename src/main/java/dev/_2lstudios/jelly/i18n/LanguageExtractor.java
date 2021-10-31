@@ -14,7 +14,7 @@ public class LanguageExtractor {
     }
 
     private static boolean shouldExtractEntry(final JarEntry entry) {
-        return entry.getName().startsWith("lang/") && entry.getName().endsWith(".json");
+        return entry.getName().startsWith("lang/") && entry.getName().endsWith(".yml");
     }
 
     public static void extractAll(final File target) {
