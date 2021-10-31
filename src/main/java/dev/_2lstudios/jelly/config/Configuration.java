@@ -42,7 +42,7 @@ public class Configuration extends YamlConfiguration {
     }
 
     public void setIfNotExist(final String path, final Object value) {
-        if (!this.contains(path)) {
+        if (!this.contains(path) && value != null) {
             this.set(path, value);
             this.safeSave();
         }
