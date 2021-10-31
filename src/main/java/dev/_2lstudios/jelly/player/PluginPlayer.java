@@ -72,6 +72,6 @@ public class PluginPlayer {
     }
 
     public void sendI18nMessage(final String key) {
-        this.sendI18nMessage(this.getI18nString(key));
+        this.sendMessage(this.getI18nString(key));
     }
 }
