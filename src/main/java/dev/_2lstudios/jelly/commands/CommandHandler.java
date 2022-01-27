@@ -131,7 +131,7 @@ public class CommandHandler implements CommandExecutor {
                             }
                         }
                     }
-                }.runTask(plugin);
+                }.runTaskAsynchronously(plugin);
             } else {
                 listener.handle(context);
             }
