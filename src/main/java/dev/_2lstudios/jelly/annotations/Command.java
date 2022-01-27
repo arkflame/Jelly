@@ -22,5 +22,7 @@ public @interface Command {
 
     public int minArguments() default Integer.MIN_VALUE;
 
+    public boolean async() default false;
+
     public CommandExecutionTarget target() default CommandExecutionTarget.BOTH;
 }

@@ -19,7 +19,6 @@ public abstract class CommandListener {
         this.subcommands.add(obj);
     }
 
-    
     public CommandListener getSubcommand(final String name) {
         for (final CommandListener subcommand : this.subcommands) {
             Command cmd = subcommand.getClass().getAnnotation(Command.class);
@@ -51,32 +50,32 @@ public abstract class CommandListener {
     }
 
     /* Override default methods */
-    public void onMissingPermissions (final CommandContext context, final String permission) {
+    public void onMissingPermissions(final CommandContext context, final String permission) {
         context.getPluginPlayer().sendMessage("&cError, missing permission &e" + permission + "&c.");
     }
 
-    public void onBadArgument (final CommandContext context, final ArgumentParserException e) {
+    public void onBadArgument(final CommandContext context, final ArgumentParserException e) {
         context.getSender().sendMessage(ChatColor.translateAlternateColorCodes('&', context.getCommand().usage()));
         context.getSender().sendMessage("§c" + e.getMessage());
     }
 
-    public void onOnlyConsole (final CommandContext context) {
+    public void onOnlyConsole(final CommandContext context) {
         context.getPluginPlayer().sendMessage("&cThis command can run only in console.");
     }
 
-    public void onOnlyPlayer (final CommandContext context) {
+    public void onOnlyPlayer(final CommandContext context) {
         context.getSender().sendMessage("§cThis command can run only by a player.");
     }
 
-    public void onMissingArguments (final CommandContext context, final int provided, final int required) {
+    public void onMissingArguments(final CommandContext context, final int provided, final int required) {
         context.getSender().sendMessage(ChatColor.translateAlternateColorCodes('&', context.getCommand().usage()));
     }
 
-    public void onPlayerOffline (final CommandContext context, final PlayerOfflineException e) {
+    public void onPlayerOffline(final CommandContext context, final PlayerOfflineException e) {
         context.getSender().sendMessage("§c" + e.getMessage());
     }
 
-    public void onCommandException (final CommandContext context, final CommandException e) {
+    public void onCommandException(final CommandContext context, final CommandException e) {
         context.getSender().sendMessage("§c" + e.getMessage());
     }
 

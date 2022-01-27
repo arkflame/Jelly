@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import dev._2lstudios.jelly.JellyPlugin;
 import dev._2lstudios.jelly.annotations.Command;
@@ -36,18 +37,20 @@ public class CommandHandler implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmdInfo, String label, String[] args) {
         String name = cmdInfo.getName().toLowerCase();
-        CommandListener listener = this.commands.get(name);
+        CommandListener auxListener = this.commands.get(name);
 
         while (args.length > 0) {
-            CommandListener subCommand = listener.getSubcommand(args[0]);
+            CommandListener subCommand = auxListener.getSubcommand(args[0]);
             if (subCommand != null) {
-                listener = subCommand;
+                auxListener = subCommand;
                 args = ArrayUtils.shift(args, 0);
             } else {
                 break;
             }
         }
-        
+
+        final CommandListener listener = auxListener;
+
         // Read command data from annotation
         Command command = listener.getClass().getAnnotation(Command.class);
 
@@ -55,7 +58,7 @@ public class CommandHandler implements CommandExecutor {
         final Object[] argList = new Object[args.length];
         final int argumentDefinedLength = command.arguments().length;
         Exception exception = null;
-        
+
         for (int i = 0; i < args.length; i++) {
             if (argumentDefinedLength >= (i + 1)) {
                 final Class<?> clazz = command.arguments()[i];
@@ -70,7 +73,7 @@ public class CommandHandler implements CommandExecutor {
                 argList[i] = args[i];
             }
         }
-        
+
         // Create command context
         final CommandArguments arguments = new CommandArguments(argList);
         final CommandContext context = new CommandContext(this.plugin, command, sender, arguments);
@@ -112,7 +115,26 @@ public class CommandHandler implements CommandExecutor {
 
         // Execute command
         try {
-            listener.handle(context);
+            if (command.async()) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            listener.handle(context);
+                        } catch (Exception e) {
+                            if (e instanceof CommandException) {
+                                listener.onCommandException(context, (CommandException) e);
+                            } else {
+                                sender.sendMessage(
+                                        "§cFatal exception ocurred while executing command. See console for more details.");
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }.runTask(plugin);
+            } else {
+                listener.handle(context);
+            }
         } catch (Exception e) {
             if (e instanceof CommandException) {
                 listener.onCommandException(context, (CommandException) e);
