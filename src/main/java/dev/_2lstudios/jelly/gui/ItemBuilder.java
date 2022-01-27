@@ -246,7 +246,7 @@ public class ItemBuilder {
         ItemStack item = null;
 
         if (this.itemstack == null) {
-            new ItemStack(this.material, amount == -1 ? 1 : amount, (short) this.data);
+            item = new ItemStack(this.material, amount == -1 ? 1 : amount, (short) this.data);
         } else {
             item = itemstack.clone();
             item.setAmount(amount == -1 ? item.getAmount() : amount);
