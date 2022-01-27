@@ -35,7 +35,6 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
-        System.out.println(e.getCursor());
         if (e.getWhoClicked() instanceof Player
                 && (e.getSlotType() == SlotType.CONTAINER || e.getSlotType() == SlotType.QUICKBAR)) {
             final Inventory clickedInventory = e.getClickedInventory();
