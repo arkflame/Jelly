@@ -15,17 +15,20 @@ public class ItemBuilder {
     private boolean modified = false;
 
     /* Item props */
-    private int amount = 1;
+    private int amount = -1;
     private int data = 0;
     private boolean draggable = false;
     private List<String> lore;
     private Material material;
     private String name;
 
+    /* Special item props */
+    private ItemStack itemstack;
+
     /* In inventory data */
     private int slot = -1;
     private boolean show = true;
-    
+
     /* Actions */
     private Runnable dragInAction;
     private Runnable dragOutAction;
@@ -34,86 +37,96 @@ public class ItemBuilder {
     private Runnable modifyAction;
 
     /* Constructors */
-    public ItemBuilder (final Material material) {
+    public ItemBuilder(final ItemStack stack) {
+        this.itemstack = stack;
+    }
+
+    public ItemBuilder(final Material material) {
         this.material = material;
     }
 
-    public ItemBuilder (final String material) {
+    public ItemBuilder(final String material) {
         this.material = Material.matchMaterial(material);
     }
 
-    public ItemBuilder () {
+    public ItemBuilder() {
         this.material = null;
     }
 
-    public ItemBuilder clone () {
-        return new ItemBuilder(this.material)
-            .setName(this.name)
-            .setAmount(this.amount)
-            .setData(this.data)
-            .setDragInAction(this.dragInAction)
-            .setDragOutAction(this.dragOutAction)
-            .setDraggable(this.draggable)
-            .setLeftClickAction(this.leftClickAction)
-            .setLore(this.lore)
-            .setModifyAction(this.modifyAction)
-            .setPosition(this.slot)
-            .setRightClickAction(this.rightClickAction)
-            .setShow(this.show)
-            .setModified(this.modified);
+    public ItemBuilder clone() {
+        ItemBuilder item = null;
+        if (this.itemstack != null) {
+            item = new ItemBuilder(this.itemstack);
+        } else {
+            item = new ItemBuilder(this.material);
+        }
+
+        return item.setName(this.name)
+                .setAmount(this.amount)
+                .setData(this.data)
+                .setDragInAction(this.dragInAction)
+                .setDragOutAction(this.dragOutAction)
+                .setDraggable(this.draggable)
+                .setLeftClickAction(this.leftClickAction)
+                .setLore(this.lore)
+                .setModifyAction(this.modifyAction)
+                .setPosition(this.slot)
+                .setRightClickAction(this.rightClickAction)
+                .setShow(this.show)
+                .setModified(this.modified);
     }
 
     /* Getters */
-    public boolean isDraggable () {
+    public boolean isDraggable() {
         return this.draggable;
     }
 
-    public boolean isEmpty () {
+    public boolean isEmpty() {
         return this.material == null || this.material == Material.AIR;
     }
 
-    public boolean isModified () {
+    public boolean isModified() {
         return this.modified;
     }
 
-    public boolean isShow () {
+    public boolean isShow() {
         return this.show;
     }
 
-    public ItemStack getItemDragged () {
+    public ItemStack getItemDragged() {
         return this.itemDragged;
     }
 
-    public int getSlot () {
+    public int getSlot() {
         return this.slot;
     }
 
     /* Setters */
-    public ItemBuilder setAmount (final int amount) {
+    public ItemBuilder setAmount(final int amount) {
         this.amount = amount;
         this.setModified(true);
         return this;
     }
 
-    public ItemBuilder setData (final int data) {
+    public ItemBuilder setData(final int data) {
         this.data = data;
         this.setModified(true);
         return this;
     }
 
-    public ItemBuilder setDraggable (final boolean draggable) {
+    public ItemBuilder setDraggable(final boolean draggable) {
         this.draggable = draggable;
         this.setModified(true);
         return this;
     }
 
-    public ItemBuilder setLore (final List<String> lore) {
+    public ItemBuilder setLore(final List<String> lore) {
         this.lore = lore;
         this.setModified(true);
         return this;
     }
 
-    public ItemBuilder setLore (final String lore) {
+    public ItemBuilder setLore(final String lore) {
         this.lore = new ArrayList<>();
         for (final String line : lore.split("\n")) {
             this.lore.add(line);
@@ -122,19 +135,19 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setName (final String name) {
+    public ItemBuilder setName(final String name) {
         this.name = name;
         this.setModified(true);
         return this;
     }
 
-    public ItemBuilder setPosition (final int slot) {
+    public ItemBuilder setPosition(final int slot) {
         this.slot = slot;
         this.setModified(true);
         return this;
     }
 
-    public ItemBuilder setPosition (final int x, final int y) {
+    public ItemBuilder setPosition(final int x, final int y) {
         if (x == -1 || y == -1) {
             return this.setPosition(-1);
         } else {
@@ -142,59 +155,59 @@ public class ItemBuilder {
         }
     }
 
-    public ItemBuilder setShow (final boolean show) {
+    public ItemBuilder setShow(final boolean show) {
         this.show = show;
         this.setModified(true);
         return this;
     }
 
-    public ItemBuilder setDragInAction (final Runnable runnable) {
+    public ItemBuilder setDragInAction(final Runnable runnable) {
         this.dragInAction = runnable;
         return this;
     }
 
-    public ItemBuilder setDragOutAction (final Runnable runnable) {
+    public ItemBuilder setDragOutAction(final Runnable runnable) {
         this.dragOutAction = runnable;
         return this;
     }
 
-    public ItemBuilder setLeftClickAction (final Runnable runnable) {
+    public ItemBuilder setLeftClickAction(final Runnable runnable) {
         this.leftClickAction = runnable;
         return this;
     }
 
-    public ItemBuilder setRightClickAction (final Runnable runnable) {
+    public ItemBuilder setRightClickAction(final Runnable runnable) {
         this.rightClickAction = runnable;
         return this;
     }
 
-    public ItemBuilder setModifyAction (final Runnable runnable) {
+    public ItemBuilder setModifyAction(final Runnable runnable) {
         this.modifyAction = runnable;
         return this;
     }
 
-    public ItemBuilder setType (final Material type) {
+    public ItemBuilder setType(final Material type) {
         this.material = type;
         this.setModified(true);
         return this;
     }
 
     /* Methods */
-    public ItemBuilder handleLeftClick () {
+    public ItemBuilder handleLeftClick() {
         if (this.leftClickAction != null) {
             this.leftClickAction.run();
         }
         return this;
     }
 
-    public ItemBuilder handleRightClick () {
+    public ItemBuilder handleRightClick() {
         if (this.rightClickAction != null) {
             this.rightClickAction.run();
         }
         return this;
     }
 
-    public ItemBuilder handleDragIn (final ItemStack item) {
+    public ItemBuilder handleDragIn(final ItemStack item) {
         this.itemDragged = item;
         if (this.dragInAction != null) {
             this.dragInAction.run();
@@ -202,7 +215,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder handleDragOut () {
+    public ItemBuilder handleDragOut() {
         this.itemDragged = null;
         if (this.dragOutAction != null) {
             this.dragOutAction.run();
@@ -210,34 +223,39 @@ public class ItemBuilder {
         return this;
     }
 
-    public void handleModifyAction () {
+    public void handleModifyAction() {
         if (this.modifyAction != null) {
             this.modifyAction.run();
         }
     }
 
-    public ItemBuilder setModified (final boolean modified) {
+    public ItemBuilder setModified(final boolean modified) {
         this.modified = modified;
         if (this.modified) {
             this.handleModifyAction();
         }
         return this;
     }
-    
+
     @SuppressWarnings("deprecation")
-    public ItemStack build () {
+    public ItemStack build() {
         if (this.isEmpty() || !this.show) {
             return null;
         }
-        
-        final ItemStack item = new ItemStack(this.material, this.amount, (short) this.data);
+
+        ItemStack item = null;
+
+        if (this.itemstack == null) {
+            new ItemStack(this.material, amount == -1 ? 1 : amount, (short) this.data);
+        } else {
+            item = itemstack.clone();
+            item.setAmount(amount == -1 ? item.getAmount() : amount);
+        }
+
         final ItemMeta meta = item.getItemMeta();
-        
         meta.setLore(this.lore);
         meta.setDisplayName(this.name);
-
         item.setItemMeta(meta);
-
         this.setModified(false);
         return item;
     }
