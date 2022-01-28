@@ -29,13 +29,11 @@ public abstract class InventoryGUI {
         new BukkitRunnable() {
             @Override
             public void run() {
-                System.out.println("UWU");
                 init(context);
                 final Inventory inv = context.buildInventory();
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        System.out.println("LOL");
                         player.openInventory(inv);
                     }
                 }.runTask(plugin);
