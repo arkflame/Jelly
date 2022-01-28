@@ -8,7 +8,7 @@
 
     <name>jelly</name>
     <description>Framework to make Bukkit plugins</description>
-    <version>0.1.6</version>
+    <version>0.1.7</version>
     <url>https://twitter.com/sammwy</url>
 
     <properties>
