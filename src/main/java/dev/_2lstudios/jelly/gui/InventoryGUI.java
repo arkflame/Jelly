@@ -2,7 +2,6 @@ package dev._2lstudios.jelly.gui;
 
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -26,15 +25,16 @@ public abstract class InventoryGUI {
 
     public void openAsync(final Plugin plugin, final Player player) {
         final InventoryGUIContext context = new InventoryGUIContext(player, this);
-        final CompletableFuture<Void> future = new CompletableFuture<>();
 
-        future.whenComplete((value, err) -> {
-            player.openInventory(context.buildInventory());
-        });
-
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        CompletableFuture.supplyAsync(() -> {
             this.init(context);
-            future.complete(null);
+            return 0;
+        }).whenComplete((input, exception) -> {
+            if (exception != null) {
+                exception.printStackTrace();
+            }
+
+            player.openInventory(context.buildInventory());
         });
     }
 }
