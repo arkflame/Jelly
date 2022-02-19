@@ -11,6 +11,7 @@ import dev._2lstudios.jelly.commands.CommandListener;
 import dev._2lstudios.jelly.config.ConfigManager;
 import dev._2lstudios.jelly.config.Configuration;
 import dev._2lstudios.jelly.i18n.LanguageManager;
+import dev._2lstudios.jelly.listeners.CommandPreProcessListener;
 import dev._2lstudios.jelly.listeners.InventoryClickListener;
 import dev._2lstudios.jelly.listeners.InventoryCloseListener;
 import dev._2lstudios.jelly.listeners.PlayerJoinListener;
@@ -19,16 +20,44 @@ import dev._2lstudios.jelly.player.IPluginPlayerManager;
 
 public class JellyPlugin extends JavaPlugin {
 
-    private CommandHandler commandHandler = new CommandHandler(this);
-    private ConfigManager configManager = new ConfigManager(this);
-    private LanguageManager languageManager = new LanguageManager(new File(this.getDataFolder(), "lang"));
+    private CommandHandler commandHandler;
+    private ConfigManager configManager;
+    private LanguageManager languageManager;
     private IPluginPlayerManager pluginPlayerManager;
 
+    // API Hooks.
     public void useInventoryAPI() {
         this.addEventListener(new InventoryClickListener());
         this.addEventListener(new InventoryCloseListener());
     }
 
+    public void useCommandAPI() {
+        this.commandHandler = new CommandHandler(this);
+        this.addEventListener(new CommandPreProcessListener(this));
+    }
+
+    public void useConfigAPI() {
+        this.configManager = new ConfigManager(this);
+    }
+
+    public void useLanguageAPI() {
+        this.languageManager = new LanguageManager(new File(this.getDataFolder(), "lang"));
+    }
+
+    // Hook Getters.
+    public CommandHandler getCommandHandler() {
+        return this.commandHandler;
+    }
+
+    public IPluginPlayerManager getPluginPlayerManager() {
+        return this.pluginPlayerManager;
+    }
+
+    public LanguageManager getLanguageManager() {
+        return this.languageManager;
+    }
+
+    // Sort-hand methods.
     public void addCommand(CommandListener cmd) {
         this.commandHandler.addCommand(cmd);
     }
@@ -39,14 +68,6 @@ public class JellyPlugin extends JavaPlugin {
 
     public Configuration getConfig(final String name) {
         return this.configManager.getConfig(name);
-    }
-
-    public IPluginPlayerManager getPluginPlayerManager() {
-        return this.pluginPlayerManager;
-    }
-
-    public LanguageManager getLanguageManager() {
-        return this.languageManager;
     }
 
     public void setPluginPlayerManager(final IPluginPlayerManager manager) {

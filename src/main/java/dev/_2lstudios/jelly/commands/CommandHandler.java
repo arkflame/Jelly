@@ -26,17 +26,34 @@ public class CommandHandler implements CommandExecutor {
         this.plugin = plugin;
     }
 
+    public boolean hasCommand(final String name) {
+        return this.commands.containsKey(name);
+    }
+
+    public boolean hasSilentcommand(final String name) {
+        CommandListener listener = this.commands.get(name);
+        if (listener != null) {
+            Command command = this.commands.get(name).getClass().getAnnotation(Command.class);
+            if (command.silent()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void addCommand(final CommandListener listener) {
         if (listener.getClass().isAnnotationPresent(Command.class)) {
             Command command = listener.getClass().getAnnotation(Command.class);
             this.commands.put(command.name(), listener);
-            this.plugin.getCommand(command.name()).setExecutor(this);
+
+            if (!command.silent()) {
+                this.plugin.getCommand(command.name()).setExecutor(this);
+            }
         }
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmdInfo, String label, String[] args) {
-        String name = cmdInfo.getName().toLowerCase();
+    public boolean runCommand(CommandSender sender, String name, String[] args) {
         CommandListener auxListener = this.commands.get(name);
 
         while (args.length > 0) {
@@ -145,6 +162,12 @@ public class CommandHandler implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmdInfo, String label, String[] args) {
+        String name = cmdInfo.getName().toLowerCase();
+        return this.runCommand(sender, name, args);
     }
 
 }

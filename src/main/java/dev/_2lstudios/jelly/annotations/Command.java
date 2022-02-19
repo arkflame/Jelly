@@ -24,5 +24,7 @@ public @interface Command {
 
     public boolean async() default false;
 
+    public boolean silent() default false;
+
     public CommandExecutionTarget target() default CommandExecutionTarget.BOTH;
 }
