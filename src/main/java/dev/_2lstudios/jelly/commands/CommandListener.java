@@ -25,6 +25,12 @@ public abstract class CommandListener {
             if (cmd.name().equalsIgnoreCase(name)) {
                 return subcommand;
             }
+
+            for (final String alias : cmd.aliases()) {
+                if (alias.equalsIgnoreCase(name)) {
+                    return subcommand;
+                }
+            }
         }
 
         return null;

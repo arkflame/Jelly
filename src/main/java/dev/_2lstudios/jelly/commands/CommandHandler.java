@@ -45,11 +45,16 @@ public class CommandHandler implements CommandExecutor {
     public void addCommand(final CommandListener listener) {
         if (listener.getClass().isAnnotationPresent(Command.class)) {
             Command command = listener.getClass().getAnnotation(Command.class);
-            this.commands.put(command.name(), listener);
 
             if (!command.silent()) {
                 this.plugin.getCommand(command.name()).setExecutor(this);
             }
+
+            for (final String alias : command.aliases()) {
+                this.commands.put(alias, listener);
+            }
+
+            this.commands.put(command.name(), listener);
         }
     }
 

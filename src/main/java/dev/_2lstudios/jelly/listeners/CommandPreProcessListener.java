@@ -33,5 +33,7 @@ public class CommandPreProcessListener implements Listener {
             e.setCancelled(true);
             this.handler.runCommand(e.getPlayer(), command, args);
         }}
+        
+
     }
 }

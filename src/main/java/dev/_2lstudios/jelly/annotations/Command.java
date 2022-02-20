@@ -20,6 +20,8 @@ public @interface Command {
 
     public Class<?>[] arguments() default {};
 
+    public String[] aliases() default {};
+
     public int minArguments() default Integer.MIN_VALUE;
 
     public boolean async() default false;
