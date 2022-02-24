@@ -20,7 +20,7 @@ public class CommandPreProcessListener implements Listener {
     public void onPreCommand(final PlayerCommandPreprocessEvent e) {
         if (!e.isCancelled()) {
         String parts = e.getMessage().substring(1);
-        String command = parts.split(" ", 1)[0];
+        String command = parts.split(" ", 2)[0];
         String[] args = null;
 
         if (parts.contains(" ")) {
