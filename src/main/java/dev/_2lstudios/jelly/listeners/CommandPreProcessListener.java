@@ -24,7 +24,7 @@ public class CommandPreProcessListener implements Listener {
         String[] args = null;
 
         if (parts.contains(" ")) {
-            args = parts.split(" ", 1)[1].split(" ");
+            args = parts.split(" ", 2)[1].split(" ");
         } else {
             args = new String[0];
         }
