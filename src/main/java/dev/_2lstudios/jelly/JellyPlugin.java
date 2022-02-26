@@ -40,8 +40,8 @@ public class JellyPlugin extends JavaPlugin {
         this.configManager = new ConfigManager(this);
     }
 
-    public void useLanguageAPI() {
-        this.languageManager = new LanguageManager(new File(this.getDataFolder(), "lang"));
+    public void useLanguageAPI(final String defaultLanguage) {
+        this.languageManager = new LanguageManager(defaultLanguage, new File(this.getDataFolder(), "lang"));
     }
 
     // Hook Getters.

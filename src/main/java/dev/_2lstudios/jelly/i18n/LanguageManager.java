@@ -13,10 +13,12 @@ import dev._2lstudios.jelly.utils.FileUtils;
 
 public class LanguageManager {
     private Map<String, Configuration> languages;
+    private final String defaultLanguage;
     private final File directory;
 
-    public LanguageManager(final File directory) {
+    public LanguageManager(final String defaultLanguage, final File directory) {
         this.languages = new HashMap<>();
+        this.defaultLanguage = defaultLanguage;
         this.directory = directory;
 
         LanguageExtractor.extractAll(directory);
@@ -59,6 +61,6 @@ public class LanguageManager {
     }
 
     public String getDefaultLocale() {
-        return "en";
+        return this.defaultLanguage;
     }
 }
