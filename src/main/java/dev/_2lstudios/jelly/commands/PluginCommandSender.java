@@ -2,6 +2,7 @@ package dev._2lstudios.jelly.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import dev._2lstudios.jelly.JellyPlugin;
 
@@ -29,7 +30,14 @@ public class PluginCommandSender {
     }
 
     public void sendMessage(final String message) {
-        this.sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        if (this.sender instanceof Player) {
+            this.sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        } else {
+            String lines = ChatColor.translateAlternateColorCodes('&', message);
+            for (String line : lines.split("\n")) {
+                this.sender.sendMessage(line);
+            }
+        }
     }
 
     public void sendI18nMessage(final String key) {
