@@ -3,6 +3,7 @@ package dev._2lstudios.jelly.player;
 import java.lang.reflect.Field;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -39,7 +40,7 @@ public class PluginPlayer extends PluginCommandSender {
 
     public void kick(final String message) {
         if (Bukkit.isPrimaryThread()) {
-            this.player.kickPlayer(message);
+            this.player.kickPlayer(ChatColor.translateAlternateColorCodes('&', message));
         } else {
             Bukkit.getScheduler().runTask(this.plugin, () -> {
                 this.kick(message);
