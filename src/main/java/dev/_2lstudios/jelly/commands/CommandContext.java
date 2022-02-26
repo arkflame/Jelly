@@ -1,6 +1,5 @@
 package dev._2lstudios.jelly.commands;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import dev._2lstudios.jelly.JellyPlugin;
@@ -8,23 +7,22 @@ import dev._2lstudios.jelly.annotations.Command;
 import dev._2lstudios.jelly.player.PluginPlayer;
 
 public class CommandContext {
-
     private final CommandArguments arguments;
     private final Command command;
     private final JellyPlugin plugin;
-    private final CommandSender sender;
+    private final PluginCommandSender sender;
 
     private final boolean isPlayer;
 
     private PluginPlayer pluginPlayer;
 
-    public CommandContext(final JellyPlugin plugin, final Command command, final CommandSender sender, final CommandArguments arguments) {
+    public CommandContext(final JellyPlugin plugin, final Command command, final PluginCommandSender sender, final CommandArguments arguments) {
         this.arguments = arguments;
         this.command = command;
         this.plugin = plugin;
         this.sender = sender;
 
-        this.isPlayer = sender instanceof Player;
+        this.isPlayer = sender.getBukkitCommandSender() instanceof Player;
 
         if (plugin.getPluginPlayerManager() != null && this.isExecutedByPlayer()) {
             this.pluginPlayer = plugin.getPluginPlayerManager().getPlayer(this.getPlayer());
@@ -45,7 +43,7 @@ public class CommandContext {
 
     public Player getPlayer() {
         if (this.isExecutedByPlayer()) {
-            return (Player) this.sender;
+            return (Player) this.sender.getBukkitCommandSender();
         } else {
             return null;
         }
@@ -59,7 +57,7 @@ public class CommandContext {
         return this.plugin;
     }
 
-    public CommandSender getSender() {
+    public PluginCommandSender getSender() {
         return this.sender;
     }
 }

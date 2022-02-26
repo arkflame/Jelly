@@ -97,8 +97,9 @@ public class CommandHandler implements CommandExecutor {
         }
 
         // Create command context
-        final CommandArguments arguments = new CommandArguments(argList);
-        final CommandContext context = new CommandContext(this.plugin, command, sender, arguments);
+        CommandArguments arguments = new CommandArguments(argList);
+        PluginCommandSender pluginSender = new PluginCommandSender(this.plugin, sender);
+        CommandContext context = new CommandContext(this.plugin, command, pluginSender, arguments);
 
         if (exception != null) {
             if (exception instanceof ArgumentParserException) {

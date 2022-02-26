@@ -38,7 +38,7 @@ public class LanguageManager {
         } else if (languages.containsKey(name.split("[-]")[0])) {
             return languages.get(name.split("[-]")[0]);
         } else {
-            return languages.get("en");
+            return languages.get(this.getDefaultLocale());
         }
     }
 
@@ -56,5 +56,9 @@ public class LanguageManager {
                 }
             }
         }
+    }
+
+    public String getDefaultLocale() {
+        return "en";
     }
 }

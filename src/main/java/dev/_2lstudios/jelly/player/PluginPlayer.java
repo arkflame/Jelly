@@ -2,21 +2,21 @@ package dev._2lstudios.jelly.player;
 
 import java.lang.reflect.Field;
 
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import dev._2lstudios.jelly.JellyPlugin;
+import dev._2lstudios.jelly.commands.PluginCommandSender;
 import dev._2lstudios.jelly.utils.ReflectionUtils;
 import dev._2lstudios.jelly.utils.ServerUtils;
 
-public class PluginPlayer {
-    private final JellyPlugin plugin;
+public class PluginPlayer extends PluginCommandSender {
     private final Player player;
 
     public PluginPlayer(final JellyPlugin plugin, final Player player) {
-        this.plugin = plugin;
+        super(plugin, player);
         this.player = player;
     }
 
@@ -24,6 +24,7 @@ public class PluginPlayer {
         return this.player;
     }
 
+    @Override
     public String getLocale() {
         try {
             final Object ep = ReflectionUtils.getMethod("getHandle", player.getClass()).invoke(player, (Object[]) null);
@@ -32,14 +33,22 @@ public class PluginPlayer {
             return (String) f.get(ep);
         } catch (final Exception e) {
             e.printStackTrace();
-            return "en";
+            return super.getLocale();
         }
     }
 
-    public String getI18nString(final String key) {
-        final String locale = this.getLocale().toLowerCase();
-        final String value = this.plugin.getLanguageManager().getLanguage(locale).getString(key);
-        return value != null ? value : "&cMissing translation key " + key + " for locale " + locale + ".";
+    public void kick(final String message) {
+        if (Bukkit.isPrimaryThread()) {
+            this.player.kickPlayer(message);
+        } else {
+            Bukkit.getScheduler().runTask(this.plugin, () -> {
+                this.kick(message);
+            });
+        }
+    }
+
+    public void kickI18n(final String key) {
+        this.kick(this.getI18nString(key));
     }
 
     public void playSound(final Sound sound) {
@@ -65,13 +74,5 @@ public class PluginPlayer {
         } else {
             this.getBukkitPlayer().sendTitle(title, subtitle, fadeInTime, showTime, fadeOutTime);
         }
-    }
-
-    public void sendMessage(final String message) {
-        this.player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-    }
-
-    public void sendI18nMessage(final String key) {
-        this.sendMessage(this.getI18nString(key));
     }
 }
